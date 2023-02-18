@@ -13,10 +13,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test12.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import  MY_API_KEY
+import com.example.test12.msg.MsgAdapter
+import kotlinx.android.synthetic.main.activity_main.ll_progress
+import kotlinx.android.synthetic.main.activity_main.progressBar
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -70,8 +71,15 @@ class MainActivity : AppCompatActivity() {
         val openAI = OpenAI(API_KEY)
         var prompt = editText.text.toString()//要和ai說的話
         val message = binding.editText.text.toString()
+
+        progressBar.progress=0
+        ll_progress.visibility=View.VISIBLE
+
         CoroutineScope(Dispatchers.IO).launch {
             prompt += "\n\nHuman: $message \nAI:"
+
+            ll_progress.visibility= View.VISIBLE
+
             try {
                 val response = openAI.createCompletion(
                     model = "text-davinci-003",
@@ -83,20 +91,29 @@ class MainActivity : AppCompatActivity() {
                     presence_penalty = 0.0,
                     stop = listOf(" Human:", " AI:")
                 )//ai相關參數
+
                 if (response.isSuccessful) {
                     answer = response.body()?.choices?.first()?.text.toString()//ai回答的話
                     CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(this@MainActivity, answer, Toast.LENGTH_SHORT).show()
+//                      Toast.makeText(this@MainActivity, answer, Toast.LENGTH_SHORT).show()
+
+                        ll_progress.visibility=View.GONE
+
                         msgList.add(Msg(answer, Msg.LEFT))//讓ai說的話顯示出來
                         msgAdapter.notifyDataSetChanged()   //为RecyclerView添加末尾子项
                     }
                 } else {
                     Log.d("RESPONSE", "Error: ${response.code()} ${response.message()}")
+                        Toast.makeText(this@MainActivity, "elsefail", Toast.LENGTH_SHORT).show()
+
                 }
             } catch (e: Exception) {
                 Log.d("RESPONSE", "Error: $e")
+                Toast.makeText(this@MainActivity, "exceptionfail", Toast.LENGTH_SHORT).show()
+
             }
         }
+
     }
 
     fun View.hideKeyboard() {

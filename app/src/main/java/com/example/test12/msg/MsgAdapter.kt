@@ -1,14 +1,12 @@
-package com.example.test12
+package com.example.test12.msg
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.test12.Msg
 import com.example.test12.databinding.MsgLeftLayoutBinding
 import com.example.test12.databinding.MsgRightLayoutBinding
-import java.lang.IllegalArgumentException
 
 class MsgAdapter(private val msgList: List<Msg>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

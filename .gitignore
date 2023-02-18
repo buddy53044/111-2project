@@ -14,5 +14,5 @@
 .cxx
 local.properties
 
-app/src/main/java/com/example/test12/key.kt
+app/src/main/java/com/example/test12/openai/key.kt
 

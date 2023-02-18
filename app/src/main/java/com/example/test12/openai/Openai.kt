@@ -1,5 +1,6 @@
 package com.example.test12
 
+import com.example.test12.openai.OpenaiService
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
